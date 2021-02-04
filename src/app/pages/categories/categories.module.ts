@@ -10,6 +10,3 @@ import { CategoryFormComponent } from "./category-form/category-form.component";
   imports: [CommonModule, CategoriesRoutingModule],
 })
 export class CategoriesModule {}
-
-// nomesite.com/categories => list (master)
-// nomesite.com/categories/23 => form (detail)
