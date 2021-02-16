@@ -2,7 +2,12 @@ import { CategoryService } from './../../categories/shared/category.service';
 import { Category } from './../../categories/shared/category.model';
 import { Entry } from './../shared/entry.model';
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EntryService } from '../shared/entry.service';
@@ -37,7 +42,15 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   ptBR = {
     firstDayOfWeek: 0,
-    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    dayNames: [
+      'Domingo',
+      'Segunda',
+      'Terça',
+      'Quarta',
+      'Quinta',
+      'Sexta',
+      'Sábado',
+    ],
     dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
     dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
     monthNames: [
@@ -54,7 +67,20 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       'Novembro',
       'Dezembro',
     ],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    monthNamesShort: [
+      'Jan',
+      'Fev',
+      'Mar',
+      'Abr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Set',
+      'Out',
+      'Nov',
+      'Dez',
+    ],
     today: 'Hoje',
     clear: 'Limpar',
   };
@@ -88,7 +114,6 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   submitForm() {
-    console.log('teste');
     this.submittingForm = true;
 
     if (this.currentAction === 'new') {
@@ -100,7 +125,8 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   // PRIVATE METHODS
   private setCurrentAction() {
-    this.currentAction = this.route.snapshot.url[0].path === 'new' ? 'new' : 'edit';
+    this.currentAction =
+      this.route.snapshot.url[0].path === 'new' ? 'new' : 'edit';
   }
 
   private buildEntryForm() {
@@ -118,18 +144,24 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   private loadEntry() {
     if (this.currentAction === 'edit') {
-      this.route.paramMap.pipe(switchMap((params) => this.entryService.getById(+params.get('id')))).subscribe(
-        (entry) => {
-          this.entry = entry;
-          this.entryForm.patchValue(entry); //binds loaded entry data to entryForm
-        },
-        (error) => alert('Ocorreu um erro no servidor')
-      );
+      this.route.paramMap
+        .pipe(
+          switchMap((params) => this.entryService.getById(+params.get('id')))
+        )
+        .subscribe(
+          (entry) => {
+            this.entry = entry;
+            this.entryForm.patchValue(entry); //binds loaded entry data to entryForm
+          },
+          (error) => alert('Ocorreu um erro no servidor')
+        );
     }
   }
 
   private loadCategories() {
-    this.categoryService.getAll().subscribe((categories) => (this.categories = categories));
+    this.categoryService
+      .getAll()
+      .subscribe((categories) => (this.categories = categories));
   }
 
   private setPageTitle() {
@@ -142,7 +174,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   private createEntry() {
-    const entry: Entry = Object.assign(new Entry(), this.entryForm.value);
+    const entry: Entry = Entry.fromJson(this.entryForm.value);
 
     this.entryService.create(entry).subscribe(
       (entry) => this.actionsForSuccess(entry),
@@ -151,7 +183,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   private updateEntry() {
-    const entry: Entry = Object.assign(new Entry(), this.entryForm.value);
+    const entry: Entry = Entry.fromJson(this.entryForm.value);
 
     this.entryService.update(entry).subscribe(
       (entry) => this.actionsForSuccess(entry),
