@@ -112,20 +112,20 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel>
 
     // redirect/reload component page
     this.router
-      .navigateByUrl('baseComponentPath', { skipLocationChange: true })
+      .navigateByUrl(baseComponentPath, { skipLocationChange: true })
       .then(() => this.router.navigate([baseComponentPath, resource.id, 'edit']));
   }
 
   protected actionsForError(error) {
-    toastr.error('Ocorreu um erro ao processar a sua solicitação.');
+    toastr.error('Ocorreu um erro ao processar a sua solicitação!');
 
     this.submittingForm = false;
 
-    if (error.status === 422) {
-      this.serverErrorMessages = JSON.parse(error._body).errors;
-    } else {
-      this.serverErrorMessages = ['Falha na comunicação com o servidor'];
-    }
+    if (error.status === 422) this.serverErrorMessages = JSON.parse(error._body).errors;
+    else
+      this.serverErrorMessages = [
+        'Falha na comunicação com o servidor. Por favor, tente mais tarde.',
+      ];
   }
 
   protected abstract buildResourceForm(): void;
